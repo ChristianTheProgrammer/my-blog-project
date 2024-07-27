@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>My Blog</h1>
+        <div id="login-form">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button onclick="login()">Login</button>
+        </div>
+        <form id="post-form" style="display: none;">
+            <input type="text" id="title" placeholder="Post Title" required>
+            <textarea id="content" placeholder="Post Content" required></textarea>
+            <button type="submit">Add Post</button>
+            <button type="button" onclick="logout()">Logout</button>
+        </form>
+        <div id="posts"></div>
+        <div id="pagination">
+            <button id="prevPage" onclick="prevPage()">Previous</button>
+            <span id="pageInfo"></span>
+            <button id="nextPage" onclick="nextPage()">Next</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
