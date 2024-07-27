@@ -20,6 +20,9 @@
             <button type="submit">Add Post</button>
             <button type="button" onclick="logout()">Logout</button>
         </form>
+        <div>
+            <input type="text" id="search" placeholder="Search posts..." oninput="searchPosts()" />
+        </div>
         <div id="posts"></div>
         <div id="pagination">
             <button id="prevPage" onclick="prevPage()">Previous</button>

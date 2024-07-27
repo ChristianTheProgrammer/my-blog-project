@@ -32,12 +32,21 @@ app.use(session({
 app.get('/posts', (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || '';
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
     fs.readFile('posts.json', (err, data) => {
         if (err) throw err;
-        const posts = JSON.parse(data);
+        let posts = JSON.parse(data);
+
+        if (search) {
+            posts = posts.filter(post =>
+                post.title.toLowerCase().includes(search.toLowerCase()) ||
+                post.content.toLowerCase().includes(search.toLowerCase())
+            );
+        }
+
         const paginatedPosts = posts.slice(startIndex, endIndex);
         res.json({
             page,

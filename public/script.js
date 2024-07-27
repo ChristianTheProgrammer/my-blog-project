@@ -1,5 +1,6 @@
 let currentPage = 1;
 const postsPerPage = 5;
+let searchQuery = '';
 
 document.getElementById('post-form').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -28,7 +29,7 @@ document.getElementById('post-form').addEventListener('submit', async function(e
 });
 
 async function loadPosts() {
-    const response = await fetch(`/posts?page=${currentPage}&limit=${postsPerPage}`);
+    const response = await fetch(`/posts?page=${currentPage}&limit=${postsPerPage}&search=${searchQuery}`);
     const data = await response.json();
     const posts = data.posts;
     const postsContainer = document.getElementById('posts');
@@ -63,6 +64,12 @@ async function prevPage() {
 
 async function nextPage() {
     currentPage++;
+    loadPosts();
+}
+
+async function searchPosts() {
+    searchQuery = document.getElementById('search').value;
+    currentPage = 1; // Reset to the first page for new searches
     loadPosts();
 }
 
