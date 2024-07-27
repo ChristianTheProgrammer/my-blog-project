@@ -129,6 +129,27 @@ app.delete('/delete-post/:id', (req, res) => {
     });
 });
 
+app.post('/add-comment', (req, res) => {
+    const { postId, comment } = req.body;
+
+    fs.readFile('posts.json', (err, data) => {
+        if (err) throw err;
+        const posts = JSON.parse(data);
+        const postIndex = posts.findIndex(post => post.id === postId);
+
+        if (postIndex === -1) {
+            return res.status(404).send('Post not found');
+        }
+
+        posts[postIndex].comments.push(comment);
+
+        fs.writeFile('posts.json', JSON.stringify(posts), err => {
+            if (err) throw err;
+            res.status(201).send();
+        });
+    });
+});
+
 const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 5, // limit each IP to 5 login requests per windowMs

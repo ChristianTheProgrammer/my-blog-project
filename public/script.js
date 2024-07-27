@@ -52,6 +52,12 @@ async function loadPosts() {
         postElement.innerHTML = `
             <h2>${post.title}</h2>
             <div>${post.content}</div>
+            <div class="comments">
+                <h3>Comments</h3>
+                ${post.comments.map(comment => `<p>${comment}</p>`).join('')}
+                <textarea id="comment-${post.id}" placeholder="Add a comment"></textarea>
+                <button onclick="addComment(${post.id})">Add Comment</button>
+            </div>
             <button onclick="editPost(${post.id})">Edit</button>
             <button onclick="deletePost(${post.id})">Delete</button>
         `;
@@ -116,6 +122,24 @@ async function deletePost(id) {
         loadPosts();
     } else {
         alert('You are not authorized to delete posts');
+    }
+}
+
+async function addComment(postId) {
+    const comment = document.getElementById(`comment-${postId}`).value;
+
+    const response = await fetch('/add-comment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ postId, comment })
+    });
+
+    if (response.ok) {
+        loadPosts();
+    } else {
+        alert('Error adding comment');
     }
 }
 
