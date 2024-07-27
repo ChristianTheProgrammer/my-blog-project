@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Website</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Quill CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -16,7 +18,7 @@
         </div>
         <form id="post-form" style="display: none;">
             <input type="text" id="title" placeholder="Post Title" required>
-            <textarea id="content" placeholder="Post Content" required></textarea>
+            <div id="editor-container" style="height: 200px;"></div>
             <button type="submit">Add Post</button>
             <button type="button" onclick="logout()">Logout</button>
         </form>
@@ -30,6 +32,8 @@
             <button id="nextPage" onclick="nextPage()">Next</button>
         </div>
     </div>
+    <!-- Quill JS -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

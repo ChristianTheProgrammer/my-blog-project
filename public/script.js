@@ -1,31 +1,40 @@
 let currentPage = 1;
 const postsPerPage = 5;
 let searchQuery = '';
+let quill;
 
-document.getElementById('post-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const title = document.getElementById('title').value;
-    const content = document.getElementById('content').value;
-    const id = Date.now(); // Use current timestamp as a unique ID for the post
-
-    console.log('Adding post with id:', id); // Debugging line
-
-    const response = await fetch('/add-post', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ id, title, content })
+document.addEventListener('DOMContentLoaded', function() {
+    quill = new Quill('#editor-container', {
+        theme: 'snow'
     });
 
-    if (response.ok) {
-        document.getElementById('title').value = '';
-        document.getElementById('content').value = '';
-        loadPosts();
-    } else {
-        alert('You are not authorized to add posts');
-    }
+    document.getElementById('post-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const title = document.getElementById('title').value;
+        const content = quill.root.innerHTML;
+        const id = Date.now(); // Use current timestamp as a unique ID for the post
+
+        console.log('Adding post with id:', id); // Debugging line
+
+        const response = await fetch('/add-post', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id, title, content })
+        });
+
+        if (response.ok) {
+            document.getElementById('title').value = '';
+            quill.root.innerHTML = '';
+            loadPosts();
+        } else {
+            alert('You are not authorized to add posts');
+        }
+    });
+
+    loadPosts();
 });
 
 async function loadPosts() {
@@ -42,7 +51,7 @@ async function loadPosts() {
         postElement.className = 'post';
         postElement.innerHTML = `
             <h2>${post.title}</h2>
-            <p>${post.content}</p>
+            <div>${post.content}</div>
             <button onclick="editPost(${post.id})">Edit</button>
             <button onclick="deletePost(${post.id})">Delete</button>
         `;
@@ -75,7 +84,7 @@ async function searchPosts() {
 
 async function editPost(id) {
     const title = prompt('Enter new title:');
-    const content = prompt('Enter new content:');
+    const content = prompt('Enter new content:', quill.root.innerHTML);
 
     if (title && content) {
         console.log('Editing post with id:', id); // Debugging line
@@ -150,5 +159,3 @@ async function logout() {
         alert('Error logging out');
     }
 }
-
-loadPosts();
